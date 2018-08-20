@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -23,7 +22,6 @@ import com.ern.web.model.User;
 public class UserDaoImp implements UserDao, Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(UserDaoImp.class);
 	@Autowired
 	   private SessionFactory sessionFactory;
 	 

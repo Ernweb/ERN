@@ -38,9 +38,16 @@ public class AppInitializer extends
 	   //Set init params // Use JSF view templates saved as *.xhtml, for use with Facelets 
 	   servletContext.setInitParameter("javax.faces.DEFAULT_SUFFIX", ".xhtml"); 
 	   servletContext.setInitParameter("javax.faces.FACELETS_VIEW_MAPPINGS", "*.xhtml"); 
+	   /*Primefaces Themes*/
+	   servletContext.setInitParameter("primefaces.THEME", "omega");
+	   /*Added for Menu Resolver*/
+	   servletContext.setInitParameter("facelets.SKIP_COMMENTS","true");  
+	   servletContext.setInitParameter("javax.faces.WEBAPP_RESOURCES_DIRECTORY", "/webapp/resources");
 	   ServletRegistration.Dynamic facesServlet = servletContext.addServlet("Faces Servlet", javax.faces.webapp.FacesServlet.class); 
 	   facesServlet.setLoadOnStartup(1); 
 	   facesServlet.addMapping("*.xhtml"); 
+	   facesServlet.addMapping("*.png"); 
+	   facesServlet.addMapping("*.jpg"); 
 	   /*ServletRegistration.Dynamic registration = servletContext.addServlet("dsp", new DispatcherServlet()); 
 	   registration.setInitParameter("contextConfigLocation", ""); 
 	   registration.setLoadOnStartup(1); 
