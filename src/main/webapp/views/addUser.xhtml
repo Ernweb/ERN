@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+<title>Add Users</title>
+</h:head>
+<h:body>
+	<h:form>
+	<div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-md-4">
+        <div class="ui-inputgroup">
+            <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+            <p:inputText placeholder="User Code" id="id" value="#{userMB.id}">
+            <f:validateLength minimum="5"/>
+				<p:ajax event="blur" update="idMsg" />
+			</p:inputText>
+			<p:message id="idMsg" for="id" display="icon" />
+        </div>
+    </div>
+ 
+    <div class="ui-g-12 ui-md-4">
+        <div class="ui-inputgroup">
+            <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+            <p:inputText placeholder="User Name" id="name" value="#{userMB.name}">
+            <f:validateLength minimum="5"/>
+				<p:ajax event="blur" update="nameMsg" />
+			</p:inputText>
+			<p:message id="nameMsg" for="name" display="icon" />
+        </div>
+    </div>
+ 
+    <div class="ui-g-12 ui-md-4">
+        <div class="ui-inputgroup">
+            <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+            <p:inputText placeHolder="User Password" id="password" value="#{userMB.password}">
+            <f:validateLength minimum="8"/>
+				<p:ajax event="blur" update="passWord" />
+			</p:inputText>
+			<p:message id="passWord" for="password" display="icon" />
+    	</div>
+    </div>
+    <div class="ui-g-12 ui-md-4">
+        <div class="ui-inputgroup">
+            <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+    		<p:selectManyMenu id="roles" value="#{userMB.roles}"
+                          var="r" filter="true" filterMatchMode="contains" showCheckbox="true">
+            <f:selectItems value="#{roleMB.roles}" var="roles" itemLabel="#{roles.roleCode}" itemValue="#{roles}" />
+ 
+            <p:column>
+                <h:outputText value="#{r.roleCode}" />
+            </p:column>
+        	</p:selectManyMenu>
+        </div>
+    </div>
+	<div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-md-4">
+        <div class="ui-inputgroup">	
+        	<p:commandButton id="addUser" value="Add" action="#{userMB.addUser}" ajax="false"/>
+		</div>
+	</div>
+	<div class="ui-g-12 ui-md-4">
+        <div class="ui-inputgroup">
+			<p:commandButton id="reset" value="Reset" action="#{userMB.reset}" ajax="false"/> 
+		</div>
+	</div>
+	</div>
+	</div>
+	</h:form>
+</h:body>
+</html>
