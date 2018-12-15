@@ -39,7 +39,15 @@ public class AppController {
         return "index";
     }
 	
-	/**
+    /**
+     * This method will redirect to addUser.
+     */
+    @RequestMapping(value = { "/", "/addUser" }, method = RequestMethod.GET)
+    public String addUsers() {
+ 
+        return "addUser";
+    }
+    /**
      * This method handles Access-Denied redirect.
      */
     @RequestMapping(value = "/Access_Denied", method = RequestMethod.GET)

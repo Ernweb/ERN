@@ -11,7 +11,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
-import com.ern.web.model.Roles;
+import com.ern.web.model.User_Roles;
 import com.ern.web.service.RolesService;
 
 /**
@@ -23,16 +23,16 @@ import com.ern.web.service.RolesService;
 public class RolesBean implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	List<Roles> roles;
+	List<User_Roles> roles;
 	/**
 	* Spring User Service is injected...
 	*/
 	@ManagedProperty(value="#{rolesService}")
 	private RolesService roleService;
 	
-	public List<Roles> getRoles(){
-		ArrayList<Roles> roleList = new ArrayList<Roles>();
-		roleList.addAll(getRoleService().getRoles());
+	public List<User_Roles> getRoles(){
+		ArrayList<User_Roles> roleList = new ArrayList<User_Roles>();
+		/*roleList.addAll(getRoleService().getRoles());*/
 		return roleList;
 	}
 

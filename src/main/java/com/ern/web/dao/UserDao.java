@@ -12,7 +12,7 @@ import com.ern.web.model.User;
  *
  */
 public interface UserDao {
-	void save(User user);
 	List<User> list();
 	User findUserByUsername(String username);
+	void addUser(User user);
 }

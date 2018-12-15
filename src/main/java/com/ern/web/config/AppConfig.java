@@ -9,13 +9,13 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.ern.web.model.User_Roles;
 import com.ern.web.model.Roles;
 import com.ern.web.model.User;
  
 @Configuration
 @EnableTransactionManagement
-@ComponentScans(value = { @ComponentScan("com.ern.web.dao"),
-	    @ComponentScan("com.ern.web.service") })
+@ComponentScans(value = { @ComponentScan("com.ern.web.dao"),@ComponentScan("com.ern.web.service") })
 public class AppConfig {
  
     @Autowired
@@ -25,7 +25,7 @@ public class AppConfig {
     public LocalSessionFactoryBean getSessionFactory() {
         LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
         factoryBean.setConfigLocation(context.getResource("classpath:hibernate.cfg.xml"));
-        factoryBean.setAnnotatedClasses(User.class, Roles.class);
+        factoryBean.setAnnotatedClasses(User.class, User_Roles.class, Roles.class);
         return factoryBean;
     }
  

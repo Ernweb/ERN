@@ -10,12 +10,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 
+import org.primefaces.context.RequestContext;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 
+import com.ern.web.model.User_Roles;
 import com.ern.web.model.Roles;
 import com.ern.web.model.User;
 import com.ern.web.service.UserService;
@@ -24,8 +29,9 @@ import com.ern.web.service.UserService;
  * @author Sandeep
  *
  */
+@Component
 @ManagedBean(name = "userMB")
-@RequestScoped
+@SessionScoped
 public class UserBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -34,10 +40,13 @@ public class UserBean implements Serializable {
 	 
 
 	List <User> users;
+	private User user = new User();
 	private String id;
 	private String name;
 	private String password;
-	private Set<Roles> roles = new HashSet<>();
+	private List<Roles> userRoles;
+	Set <User_Roles> userRoleSet;
+	
 	@ManagedProperty(value="#{userService}")
 	private UserService userService;
 	
@@ -75,21 +84,37 @@ public class UserBean implements Serializable {
     }
 
     
-    public String addUser() {
+    @SuppressWarnings("deprecation")
+	public String addUser() {
     	try {
-    		User user = new User();
-    		user.setId(id);
-    		user.setName(name);
-    		user.setPassword(password);
-    		user.setRoles(roles);
-    		getUserService().addUser(user);
-    		return SUCCESS;
+    		User newuser = new User();
+    		String cryptedPassword = new BCryptPasswordEncoder().encode(password); 
+    		User_Roles newRoles = new User_Roles();
+    		userRoles = getRoles();
+    		Set <User_Roles> userRoleSet = new HashSet <User_Roles>();
+    		for(int index = 0; index  < userRoles.size(); index++)
+    		{
+    		newRoles.setUser(newuser);
+    		newRoles.setRoleCode(userRoles.get(index).getRoleCode());
+    		userRoleSet.add(newRoles);
+    		}
+    		
+    		newuser.setId(id);
+    		newuser.setName(name);
+    		newuser.setPassword(cryptedPassword);
+    		newuser.setRoles(userRoleSet);
+    		getUserService().addUser(newuser);
+    		FacesMessage message= new FacesMessage(FacesMessage.SEVERITY_INFO, "Save ","User Information saved successfully.");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
+            return SUCCESS;
     	}
     	catch(DataAccessException e){
 		e.printStackTrace();
-    	
-    }
+		FacesMessage message= new FacesMessage(FacesMessage.SEVERITY_INFO, "Save ","Failed to save  User Information .");
+        RequestContext.getCurrentInstance().showMessageInDialog(message);
+    
     	return ERROR;
+    	}
     }
 
 	/**
@@ -137,16 +162,45 @@ public class UserBean implements Serializable {
 	/**
 	 * @return the roles
 	 */
-	public Set<Roles> getRoles() {
-		return roles;
+	public List<Roles> getRoles() {
+		ArrayList<Roles> roleList = new ArrayList<Roles>();
+		roleList.addAll(getUserService().getRoles());
+		return roleList;
 	}
 
 	/**
-	 * @param roles the roles to set
+	 * @param userRole the userRole to set
 	 */
-	public void setRoles(Set<Roles> roles) {
-		this.roles = roles;
+	public void setRoles(Set<User_Roles> userRoleSet) {
+		this.userRoleSet = userRoleSet;
 	}
-    
+
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	/**
+	 * @return the userRoles
+	 */
+	public List<Roles> getUserRoles() {
+		return userRoles;
+	}
+
+	/**
+	 * @param userRoles the userRoles to set
+	 */
+	public void setUserRoles(List<Roles> userRoles) {
+		this.userRoles = userRoles;
+	}    
     
 }

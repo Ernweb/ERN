@@ -5,17 +5,19 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.ern.web.dao.RolesDao;
 import com.ern.web.dao.UserDao;
+import com.ern.web.model.Roles;
 import com.ern.web.model.User;
 
 @Service("userService")
-@Transactional(readOnly = true)
 public class UserService implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private RolesDao rolesDao;
 	
 	/**
      * Get User List
@@ -25,7 +27,19 @@ public class UserService implements Serializable {
 		return getUserDAO().list();
 	}
 
-     /**
+	public void addUser(User user) {
+		getUserDAO().addUser(user);
+		
+	} 
+	
+	public List<Roles> getRoles(){
+		return getRolesDao().list();
+	}
+	
+	public Roles getRolebyCode(String roleCode){
+		return getRolesDao().getRolebyCode(roleCode);
+	}
+	/**
      * Get User DAO
      *
      * @return userDAO - User DAO
@@ -33,6 +47,21 @@ public class UserService implements Serializable {
     public UserDao getUserDAO() {
         return userDao;
     }
+
+    /**
+     * Get Roles DAO
+     *
+     * @instantiates the interface rolesDAO - RolesDAO
+     */
+    public RolesDao getRolesDao() {
+		return rolesDao;
+	}
+
+	public void setRolesDao(RolesDao rolesDao) {
+		this.rolesDao = rolesDao;
+	}
+
+	
 
 
 }

@@ -43,32 +43,27 @@ xmlns:p="http://primefaces.org/ui">
 			<p:message id="passWord" for="password" display="icon" />
     	</div>
     </div>
-    <div class="ui-g-12 ui-md-4">
+    <!-- <div class="ui-g-12 ui-md-4">
         <div class="ui-inputgroup">
             <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-    		<p:selectManyMenu id="roles" value="#{userMB.roles}"
+    		<p:selectManyMenu id="roles" value="#{userMB.userRoles}" converter="#{userConverter}"
                           var="r" filter="true" filterMatchMode="contains" showCheckbox="true">
-            <f:selectItems value="#{roleMB.roles}" var="roles" itemLabel="#{roles.roleCode}" itemValue="#{roles}" />
+            <f:selectItems value="#{userMB.roles}" var="roles" itemLabel="#{roles.roleCode}" itemValue="#{roles}" />
  
             <p:column>
                 <h:outputText value="#{r.roleCode}" />
             </p:column>
+            <p:column>
+                <h:outputText value="#{r.roleDesc}" />
+            </p:column>
         	</p:selectManyMenu>
         </div>
+    </div>  -->
     </div>
-	<div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-md-4">
-        <div class="ui-inputgroup">	
-        	<p:commandButton id="addUser" value="Add" action="#{userMB.addUser}" ajax="false"/>
-		</div>
-	</div>
-	<div class="ui-g-12 ui-md-4">
-        <div class="ui-inputgroup">
+	<p:row>
+	    	<p:commandButton id="addUser" value="Add" process="@form"  action="#{userMB.addUser}" ajax="false"/>
 			<p:commandButton id="reset" value="Reset" action="#{userMB.reset}" ajax="false"/> 
-		</div>
-	</div>
-	</div>
-	</div>
-	</h:form>
+	</p:row>	
+</h:form>
 </h:body>
 </html>

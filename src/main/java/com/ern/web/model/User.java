@@ -13,7 +13,6 @@ import javax.persistence.CascadeType;
  */
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -25,7 +24,6 @@ import javax.validation.constraints.Size;
 public class User {
  
    @Id
-   @GeneratedValue
    @Column(name = "USER_ID")
    private String id;
  
@@ -37,7 +35,7 @@ public class User {
    private String password;
    
    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-   private Set<Roles> roles = new HashSet<>();
+   private Set<User_Roles> roles = new HashSet<>();
 
 
 public String getId() {
@@ -64,12 +62,14 @@ public String getId() {
 		this.password = password;
    }
 
-	public Set<Roles> getRoles() {
+	public Set<User_Roles> getRoles() {
 		return roles;
 	}
 	
-	public void setRoles(Set<Roles> roles) {
-		this.roles = roles;
+	public void setRoles(Set<User_Roles> userSelectedRole) {
+		this.roles = userSelectedRole;
 	}
+
+	
   
 }

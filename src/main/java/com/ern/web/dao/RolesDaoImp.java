@@ -34,20 +34,38 @@ public class RolesDaoImp  implements RolesDao, Serializable{
 	@Transactional(readOnly = true)
 	@Override
 	public List<Roles> list() {
-		Session session=null;
+		Session session=sessionFactory.openSession();
+		List<Roles> roles = null;
 		  try {
-			session = sessionFactory.openSession();
-			return (List<Roles>) session.createQuery("from Roles").getResultList();
+			roles = (List<Roles>)session.createQuery("from Roles").getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();  
           session.getTransaction().rollback();  
-          return null;
 		} finally {
 			if(session != null && session.isOpen()) {
 				session.close();
 				session = null;
 			}
 		}
+	return roles;
+	}
+
+	@Override
+	public Roles getRolebyCode(String roleCode) {
+		return (Roles)sessionFactory.getCurrentSession().get(Roles.class, roleCode);
+	}
+	/**
+	 * @return the sessionFactory
+	 */
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	/**
+	 * @param sessionFactory the sessionFactory to set
+	 */
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
 
 }

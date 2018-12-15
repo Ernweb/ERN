@@ -13,5 +13,6 @@ import com.ern.web.model.Roles;
  */
 public interface RolesDao {
 	List<Roles> list();
+	Roles getRolebyCode(String roleCode);
 
 }

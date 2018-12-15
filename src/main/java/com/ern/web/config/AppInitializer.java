@@ -5,12 +5,15 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import com.sun.faces.config.ConfigureListener;
 
 public class AppInitializer extends
         AbstractAnnotationConfigDispatcherServletInitializer {
- 
-   @Override
+
+	@Override
    protected Class<?>[] getRootConfigClasses() {
       return new Class[] { AppConfig.class,AppSecConfig.class };
    }
@@ -25,19 +28,17 @@ public class AppInitializer extends
    protected String[] getServletMappings() {
       return new String[] { "/" };
    }
-   
-   /*@Override
-   public void onStartup(ServletContext sc) throws ServletException {
-	   /** Faces Servlet */
-	   /*ServletRegistration.Dynamic facesServlet = sc.addServlet("Faces Servlet", FacesServlet.class);
-	   facesServlet.setLoadOnStartup(1);
-	   facesServlet.addMapping("*.xhtml");
-	}*/
+  
    
    @Override public void onStartup(ServletContext servletContext) throws ServletException {
 	   //Set init params // Use JSF view templates saved as *.xhtml, for use with Facelets 
+	   servletContext.setInitParameter("spring.profiles.active", "dev"); 
+	   servletContext.setInitParameter("spring.profiles.default", "dev"); 
+	   servletContext.setInitParameter("spring.liveBeansView.mbeanDomain", "dev"); 
 	   servletContext.setInitParameter("javax.faces.DEFAULT_SUFFIX", ".xhtml"); 
 	   servletContext.setInitParameter("javax.faces.FACELETS_VIEW_MAPPINGS", "*.xhtml"); 
+	   /*Project Stage Level*/
+	   servletContext.setInitParameter("javax.faces.PROJECT_STAGE", "Development"); 
 	   /*Primefaces Themes*/
 	   servletContext.setInitParameter("primefaces.THEME", "omega");
 	   /*Added for Menu Resolver*/
@@ -48,11 +49,13 @@ public class AppInitializer extends
 	   facesServlet.addMapping("*.xhtml"); 
 	   facesServlet.addMapping("*.png"); 
 	   facesServlet.addMapping("*.jpg"); 
+	   /*Add Filter configuration*/
+	   servletContext.addFilter("securityFilter",new DelegatingFilterProxy("springSecurityFilterChain")).addMappingForUrlPatterns(null, false, "/*");
 	   /*ServletRegistration.Dynamic registration = servletContext.addServlet("dsp", new DispatcherServlet()); 
 	   registration.setInitParameter("contextConfigLocation", ""); 
 	   registration.setLoadOnStartup(1); 
-	   registration.addMapping("/");
-	   servletContext.addListener(ConfigureListener.class); 
+	   registration.addMapping("/");*/
+	   servletContext.addListener(ConfigureListener.class);
 	   servletContext.addListener(org.springframework.web.context.request.RequestContextListener.class); 
 	   
 	   //Add OpenEntityManagerInViewFilter Filter 

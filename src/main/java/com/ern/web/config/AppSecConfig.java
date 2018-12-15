@@ -16,13 +16,19 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+
 import org.apache.log4j.Logger;
 /**
+ * Spring Security configuration for a Java web application that does not use Spring Boot.
+ * This configuration has deliberately been written as to expose all the details of
+ * configuring Spring Security in a web application.
+ *
  * @author Sandeep
  *
  */
-@EnableWebSecurity
+@EnableWebSecurity(debug=true)
 public class AppSecConfig extends WebSecurityConfigurerAdapter{
+	 
 	  
 	  @Autowired
 	  @Qualifier("userDetailsService")
@@ -53,7 +59,7 @@ public class AppSecConfig extends WebSecurityConfigurerAdapter{
 			        "/javax.faces.resource/**"
 			    };
 	        http.authorizeRequests().antMatchers("/", "/list").access("hasRole('SUPERUSER') or hasRole('EMPLOYEE')")
-	                .antMatchers("/newuser/**", "/delete-user-*").access("hasRole('SUPERUSER')")
+	                .antMatchers("/views/**").access("hasRole('SUPERUSER')")
 	                .antMatchers("/edit-user-*").access("hasRole('SUPERUSER')")
 	        		.antMatchers(staticResources).permitAll()
 	                .and()
