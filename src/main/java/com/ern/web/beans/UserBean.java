@@ -14,7 +14,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-
 import org.primefaces.context.RequestContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,15 +34,17 @@ import com.ern.web.service.UserService;
 public class UserBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final String SUCCESS = "success";
+	private static final String SUCCESS = "index";
 	private static final String ERROR   = "error";
-	 
+	private static final String UPDATE   = "addUser"; 
 
 	List <User> users;
 	private User user = new User();
 	private String id;
 	private String name;
 	private String password;
+	private boolean editable = true;
+	
 	private List<Roles> userRoles;
 	Set <User_Roles> userRoleSet;
 	
@@ -55,36 +56,33 @@ public class UserBean implements Serializable {
 		userList.addAll(getUserService().getUsers());
 		return userList;
 	}
-
+  
 	/**
-     * Get User Service
-     *
-     * @return IUserService - User Service
-     */
-    public UserService getUserService() {
-        return userService;
+	 * Delete User
+	 */
+	@SuppressWarnings("deprecation")
+	public void deleteAction(String userId) {
+		User delUser = new User();
+		delUser = getUserService().getUserByCode(userId);
+		getUserService().deleteUser(delUser);
+		FacesMessage message= new FacesMessage(FacesMessage.SEVERITY_INFO, "Delete ","User Information delete successfully.");
+        RequestContext.getCurrentInstance().showMessageInDialog(message);
     }
-    
-    /**
-     * Set User Service
-     *
-     * @param User IUserService - User Service
-     */
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    /**
-     * Set User List
-     *
-     * @param userList List - User List
-     */
-    public void setUserList(List<User> users) {
-        this.users = users;
-    }
-
-    
-    @SuppressWarnings("deprecation")
+	/**
+	 * Edit UserAction
+	 */
+	public String editAction(String userId) {
+		User updateUser = new User();
+		updateUser = getUserService().getUserByCode(userId);
+		id = updateUser.getId();
+		name = updateUser.getName();
+		password = updateUser.getPassword();
+		return UPDATE;
+	}
+	/**
+	 * Add User    
+	 */
+	@SuppressWarnings("deprecation")
 	public String addUser() {
     	try {
     		User newuser = new User();
@@ -117,7 +115,34 @@ public class UserBean implements Serializable {
     	}
     }
 
-	/**
+    /**
+     * Get User Service
+     *
+     * @return IUserService - User Service
+     */
+    public UserService getUserService() {
+        return userService;
+    }
+    
+    /**
+     * Set User Service
+     *
+     * @param User IUserService - User Service
+     */
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    /**
+     * Set User List
+     *
+     * @param userList List - User List
+     */
+    public void setUserList(List<User> users) {
+        this.users = users;
+    }
+
+    /**
 	 * @return the id
 	 */
 	public String getId() {
@@ -201,6 +226,14 @@ public class UserBean implements Serializable {
 	 */
 	public void setUserRoles(List<Roles> userRoles) {
 		this.userRoles = userRoles;
+	}
+
+	public boolean getEditable() {
+		return editable;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}    
     
 }

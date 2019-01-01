@@ -26,6 +26,10 @@ public class UserDaoImp implements UserDao, Serializable {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.ern.web.dao.UserDao#list()
+	 */
    @SuppressWarnings("unchecked")
    @Transactional(readOnly = true)
    @Override
@@ -40,32 +44,58 @@ public class UserDaoImp implements UserDao, Serializable {
             session.getTransaction().rollback();  
             return null;
 		} 
-	  /*finally {
+	  finally {
 			if(session != null && session.isOpen()) {
 				session.close();
 				session = null;
 			}
-		}*/
+		}
 	      
 	   }
 	   
-	   @Override
+   	   /*
+   	    * (non-Javadoc)
+   	    * @see com.ern.web.dao.UserDao#findUserByUsername(java.lang.String)
+   	    */
+       @Transactional(readOnly = true)
+   	   @Override
 	   public User findUserByUsername(String username) {
 	     return sessionFactory.getCurrentSession().get(User.class, username);
 	   }
 	   
+	   /*
+	    * Get SessionFactory
+	    */
 	   public SessionFactory getSessionFactory() {
 			return sessionFactory;
 		}
 
-		public void setSessionFactory(SessionFactory sessionFactory) {
+	   /*
+	    * Set sessionFactory
+	    */
+	   public void setSessionFactory(SessionFactory sessionFactory) {
 			this.sessionFactory = sessionFactory;
 		}
 		
+		/*
+		 * (non-Javadoc)
+		 * @see com.ern.web.dao.UserDao#addUser(com.ern.web.model.User)
+		 */
 		@Transactional(readOnly = false)
 		@Override
 		public void addUser(User user) {
-			getSessionFactory().getCurrentSession().save(user);
+			getSessionFactory().getCurrentSession().saveOrUpdate(user);
+			
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.ern.web.dao.UserDao#deleteUser(com.ern.web.model.User)
+		 */
+		@Transactional(readOnly = false)
+		@Override
+		public void deleteUser(User user) {
+			getSessionFactory().getCurrentSession().delete(user);
 			
 		}
 

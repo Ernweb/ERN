@@ -61,7 +61,12 @@ public class UserService implements Serializable {
 		this.rolesDao = rolesDao;
 	}
 
-	
+	public void deleteUser(User user) {
+		getUserDAO().deleteUser(user);
+	}
 
+	public User getUserByCode(String userCode) {
+		return getUserDAO().findUserByUsername(userCode);
+	}
 
 }

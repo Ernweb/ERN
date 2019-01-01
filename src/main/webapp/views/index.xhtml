@@ -5,27 +5,45 @@ xmlns:f="http://java.sun.com/jsf/core"
 xmlns:ui="http://java.sun.com/jsf/facelets"
 xmlns:p="http://primefaces.org/ui">
  
-    <h:head></h:head>
-    <body>
-        <h1>User List</h1>
-        <p:dataTable var="user" value="#{userMB.users}" widgetVar="userTable" emptyMessage="No users found">
-             <p:column headerText="Id">
-                 <h:outputText value="#{user.id}"/>
-             </p:column>
-            <p:column headerText="Name">
-                <h:outputText value="#{user.name}"/>
+    <h:head><title>User Manager</title></h:head>
+    <h:body>
+    <h:form>
+        <div class="ui-fluid">
+        <p:spacer height = "1px"></p:spacer>
+        <center><h2>Administrator</h2></center>
+        <center><h3>Users</h3></center>
+        <p:dataTable var="user" value="#{userMB.users}" widgetVar="userTable" emptyMessage="No users found" editable="true" rowKey="#{user.id}"  
+        paginator="true" rows="5" rowsPerPageTemplate="5,10,15" sortMode="multiple" id="userTable">
+            <p:column selectionMode="multiple" headerText="Select" style="width:6%"></p:column>
+            
+            <p:column headerText="User Id" style="text-align: left;" sortBy="#{user.id}">
+            	 <h:outputText value="#{user.id}"/>
             </p:column>
-            <p:column headerText="Password">
-                <h:outputText value="#{user.password}"/>
+            
+            <p:column filterBy="#{user.name}"  filterOptions=""  filterMatchMode="startsWith" headerText="Name" sortBy="#{user.name}">
+            	<h:outputText value="#{user.name}"/>
             </p:column>
+            
+            <p:column headerText="Password" sortBy="#{user.password}">
+            	<h:outputText value="#{user.password}"> 
+                <f:convertDateTime type="date" pattern="dd-MMM-yyyy"/>
+                </h:outputText>
+            </p:column>
+         
+         	<p:column headerText="Actions">
+                <p:commandButton value="Edit" icon="ui-icon-arrowrefresh-1-w" type="submit" columns="2" action="#{userMB.editAction(user.id)}" > </p:commandButton>
+                <p:commandButton value="Delete" icon="ui-icon-close" type="submit" columns="2" action="#{userMB.deleteAction(user.id)}" update="userTable"> </p:commandButton>
+            </p:column>
+         
         </p:dataTable>
+        </div>
    <p:dock position="bottom">
     <p:menuitem value="Home" icon="static/images/dock/home.png" url="${request.contextPath}/login.xhtml"/>
-    <p:menuitem value="Roles" icon="static/images/dock/link.png" url="/views/addUser.xhtml"/>
-    <p:menuitem value="History" icon="static/images/dock/history.png" url="#"/>
+    <p:menuitem value="Create User" icon="static/images/dock/link.png" url="/views/addUser.xhtml"/>
+    <p:menuitem value="Logout" icon="static/images/dock/history.png" url="#"/>
     <!-- more menuitems -->
 </p:dock>     
-   <div class="ui-fluid">
+   <!-- <div class="ui-fluid">
     <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank">
         <p:outputLabel for="input" value="Input"/>
         <p:inputText id="input"/>
@@ -134,6 +152,7 @@ xmlns:p="http://primefaces.org/ui">
             </f:facet>  
         </p:panelGrid>
     </p:dialog>
-    </div>
-    </body>
+    </div> -->
+    </h:form>
+    </h:body>
 </html>
